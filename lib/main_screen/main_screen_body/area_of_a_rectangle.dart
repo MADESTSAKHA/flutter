@@ -11,7 +11,7 @@ class _AreaOfARectangleState extends State<AreaOfARectangle> {
   TextEditingController resultA = TextEditingController();
   TextEditingController resultB = TextEditingController();
 
-  double finalResult = double.parse(resultA) * double.parse(resultB),
+  double sum = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -41,85 +41,111 @@ class _AreaOfARectangleState extends State<AreaOfARectangle> {
                 child: Image.asset('assets/images/area_rectangle.png',
                     fit: BoxFit.fitHeight),
               ),
-              Text(finalResult.toString()),
+              sum != 0
+                  ? Text(
+                      sum.toString(),
+                      style: const TextStyle(
+                          fontSize: 40, fontWeight: FontWeight.bold),
+                    )
+                  : const Text(''),
             ],
           ),
           const SizedBox(height: 20),
-          Column(
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ///         Digital A
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                // crossAxisAlignment: CrossAxisAlignment.start,
+              Column(
                 children: [
-                  const Text('a = ',
-                      style:
-                          TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
-                  SizedBox(
-                    // height: 70, //Высота
-                    width: 110, //Ширина
-                    child: TextField(
-                      controller: resultA,
-                      onChanged: (String str) {
-                        setState(() {
-                          resultA = str;
-                        });
-                      },
-                      textAlign: TextAlign.center,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                          label: Text('число'),
-                          floatingLabelAlignment: FloatingLabelAlignment.center,
-                          contentPadding: EdgeInsets.all(10),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(width: 2, color: Colors.blue),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(width: 3, color: Colors.blue))),
-                    ),
+                  ///         Digital A
+                  Row(
+                    children: [
+                      const Text('a = ',
+                          style: TextStyle(
+                              fontSize: 30, fontWeight: FontWeight.bold)),
+                      SizedBox(
+                        // height: 70, //Высота
+                        width: 110, //Ширина
+                        child: TextField(
+                          controller: resultA,
+                          onChanged: (_) => calculateSum(),
+                          textAlign: TextAlign.center,
+                          keyboardType: TextInputType.number,
+                          decoration: const InputDecoration(
+                              label: Text('число'),
+                              floatingLabelAlignment:
+                                  FloatingLabelAlignment.center,
+                              contentPadding: EdgeInsets.all(10),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(width: 2, color: Colors.blue),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      width: 3, color: Colors.blue))),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              const SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
-              ///         Digital B
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                // crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('b = ',
-                      style:
-                          TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
-                  SizedBox(
-                    // height: 70, //Высота
-                    width: 110, //Ширина
-                    child: TextField(
-                      controller: resultB,
-                      textAlign: TextAlign.center,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                          label: Text('число'),
-                          floatingLabelAlignment: FloatingLabelAlignment.center,
-                          contentPadding: EdgeInsets.all(10),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(width: 2, color: Colors.blue),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(width: 3, color: Colors.blue))),
-                    ),
+                  ///         Digital B
+                  Row(
+                    children: [
+                      const Text('b = ',
+                          style: TextStyle(
+                              fontSize: 30, fontWeight: FontWeight.bold)),
+                      SizedBox(
+                        // height: 70, //Высота
+                        width: 110, //Ширина
+                        child: TextField(
+                          controller: resultB,
+                          onChanged: (_) => calculateSum(),
+                          textAlign: TextAlign.center,
+                          keyboardType: TextInputType.number,
+                          decoration: const InputDecoration(
+                              label: Text('число'),
+                              floatingLabelAlignment:
+                                  FloatingLabelAlignment.center,
+                              contentPadding: EdgeInsets.all(10),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(width: 2, color: Colors.blue),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      width: 3, color: Colors.blue))),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
+              const SizedBox(
+                width: 10,
+              ),
+
+              ///       Bottom clear ALL
+              ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      sum = 0;
+                      resultA.text = '';
+                      resultB.text = '';
+                    });
+                  },
+                  child: const Text('Clear all'))
             ],
           ),
         ],
       ),
     );
   }
-}
 
-/// Stack
+  void calculateSum() {
+    final double value1 = double.tryParse(resultA.text) ?? 0;
+    final double value2 = double.tryParse(resultB.text) ?? 0;
+    setState(() {
+      sum = value1 * value2;
+    });
+  }
+}
